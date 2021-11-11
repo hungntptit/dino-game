@@ -1,6 +1,10 @@
 import pygame
-from game_funtion import GameFuntion
+from module.game_funtion import GameFuntion
+from module.resources import ICON_IMG
 
+
+pygame.display.set_caption("Dino Game")
+pygame.display.set_icon(ICON_IMG)
 
 game = GameFuntion()
 
