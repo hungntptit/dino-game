@@ -5,8 +5,9 @@ from module.settings import *
 from module.resources import MSG_FONT, RESTART_IMG, POINT_SND, DIE_SND
 from module.dino import Dino
 from module.score import Score
-from module.obstacles import ObstacleList, Cactus, Ptero
-from module.background import Desert, Cloud, CloudList
+from module.obstacle import Cactus, Ptero
+from module.background import Desert, Cloud
+from module.object import ObjectList
 
 
 class GameFuntion:
@@ -28,8 +29,8 @@ class GameFuntion:
 
         # Objects
         self.dino = Dino()
-        self.obstacles_list = ObstacleList()
-        self.cloud_list = CloudList()
+        self.obstacle_list = ObjectList()
+        self.cloud_list = ObjectList()
         self.background = Desert()
 
         # Score
@@ -80,7 +81,7 @@ class GameFuntion:
         if (
             self.score.points > 0
             and self.score.points % 1000 == 0
-            and self.speed < 15
+            and self.speed < 16
         ):
             POINT_SND.play()
 
@@ -113,9 +114,9 @@ class GameFuntion:
         ):
             self.ob_last_time = self.this_time
             if random.randrange(0, 100) < ratio:
-                self.obstacles_list.add(Cactus())
+                self.obstacle_list.add(Cactus())
             else:
-                self.obstacles_list.add(Ptero())
+                self.obstacle_list.add(Ptero())
         # Add clouds randomly
         if (
             self.this_time -
@@ -126,7 +127,7 @@ class GameFuntion:
             self.cloud_list.add(Cloud())
 
     def check_collision(self):
-        for obstacle in self.obstacles_list:
+        for obstacle in self.obstacle_list:
             if self.dino.hitbox_head.colliderect(obstacle.hitbox) \
                     or self.dino.hitbox_body.colliderect(obstacle.hitbox):
                 return True
@@ -137,8 +138,8 @@ class GameFuntion:
         self.add_objects()
         self.update_speed()
         self.background.update(self.speed)
-        self.cloud_list.update()
-        self.obstacles_list.update(self.speed)
+        self.cloud_list.update_cl()
+        self.obstacle_list.update_ob(self.speed)
         self.dino.update(keys)
         self.score.update()
         if self.check_collision():
@@ -150,13 +151,12 @@ class GameFuntion:
     def draw_screen(self):
         SCREEN.fill(BG)
         if not self.is_start:
-            SCREEN.fill(BG)
             self.background.draw(SCREEN)
             SCREEN.blit(self.start_text, self.start_text_rect)
         else:
             self.cloud_list.draw(SCREEN)
             self.background.draw(SCREEN)
-            self.obstacles_list.draw(SCREEN)
+            self.obstacle_list.draw(SCREEN)
             if self.is_over:
                 SCREEN.blit(self.game_over_text, self.game_over_rect)
                 SCREEN.blit(RESTART_IMG, self.restart_rect)

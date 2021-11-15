@@ -2,54 +2,18 @@ import pygame
 import random
 from module.settings import *
 from module.resources import CACTUS_IMG, PTERO_IMG
+from module.object import Object
 
 
-class Obstacle():
-    def __init__(self, image, pos_x, pos_y):
-        self.image = image
-        self.pos_x = pos_x
-        self.pos_y = pos_y
-        self.hitbox = None
-        self.update_hitbox()
-
-    def draw(self, screen):
-        screen.blit(self.image, (self.pos_x, self.pos_y))
-
-
-class ObstacleList(list):
+class Cactus(Object):
     def __init__(self):
-        self.list = []
-
-    def add(self, obstacle):
-        self.list.append(obstacle)
-
-    def update(self, speed):
-        for obstacle in self.list:
-            obstacle.update(speed)
-        for i in reversed(range(len(self.list))):
-            if self.list[i].pos_x < - self.list[i].image.get_width():
-                del self.list[i]
-
-    def __len__(self):
-        return len(self.list)
-
-    def __iter__(self):
-        for obstacle in self.list:
-            yield obstacle
-
-    def draw(self, screen):
-        for obstacle in self.list:
-            obstacle.draw(screen)
-
-
-class Cactus(Obstacle):
-    def __init__(self):
-        self.index = random.randrange(0, 6)
+        self.index = random.randrange(0, len(CACTUS_IMG))
         super().__init__(CACTUS_IMG[self.index], SCREEN_W, 0)
         if self.index < 3:
-            self.pos_y = 224
+            self.pos_y = 226
         else:
             self.pos_y = 212
+        self.hitbox = None
 
     def update_hitbox(self):
         self.hitbox = pygame.Rect(
@@ -63,11 +27,12 @@ class Cactus(Obstacle):
         self.update_hitbox()
 
 
-class Ptero(Obstacle):
+class Ptero(Object):
     def __init__(self):
         self.index = 0
         super().__init__(PTERO_IMG[0], SCREEN_W,
                          random.randrange(120, 220, 20))
+        self.hitbox = None
 
     def update_hitbox(self):
         self.hitbox = pygame.Rect(
