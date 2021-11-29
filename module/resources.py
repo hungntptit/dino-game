@@ -13,6 +13,8 @@ CACTUS_IMG = [pygame.image.load("data/images/cactus/cactus_0" + str(i) + ".png")
               for i in range(1, 7)]
 PTERO_IMG = [pygame.image.load("data/images/ptero/ptero_anim/ptero_anim" + str(i) + ".png").convert_alpha()
              for i in range(1, 7)]
+VIRUS_IMG = [pygame.image.load("data/images/virus/virus" + str(i) + ".png").convert_alpha()
+             for i in range(1, 3)]
 
 RUN_IMG = [pygame.image.load("data/images/dino/run_anim/run_anim" + str(i) + ".png").convert_alpha()
            for i in range(1, 7)]

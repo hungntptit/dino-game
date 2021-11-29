@@ -5,7 +5,7 @@ from module.settings import *
 from module.resources import MSG_FONT, RESTART_IMG, POINT_SND, DIE_SND
 from module.dino import Dino
 from module.score import Score
-from module.obstacle import Cactus, Ptero
+from module.obstacle import Cactus, Ptero, Virus
 from module.background import Desert, Cloud
 from module.object import ObjectList
 
@@ -108,7 +108,7 @@ class GameFuntion:
 
     def add_objects(self):
         # Add obstacles randomly
-        ratio = 90 if self.score.points < 5000 else 60
+        ratio = 80 if self.score.points < 5000 else 50
         if self.this_time - self.ob_last_time > random.randrange(
             self.ob_min_distance, self.ob_max_distance, 100
         ):
@@ -116,7 +116,11 @@ class GameFuntion:
             if random.randrange(0, 100) < ratio:
                 self.obstacle_list.add(Cactus())
             else:
-                self.obstacle_list.add(Ptero())
+                if random.randrange(0, 100) < 50:
+                    self.obstacle_list.add(Ptero())
+                else:
+                    self.obstacle_list.add(Virus())
+
         # Add clouds randomly
         if (
             self.this_time -

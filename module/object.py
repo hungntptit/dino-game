@@ -1,3 +1,5 @@
+import pygame
+
 class Object():
     def __init__(self, image, pos_x, pos_y):
         self.image = image

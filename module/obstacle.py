@@ -1,7 +1,7 @@
 import pygame
 import random
 from module.settings import *
-from module.resources import CACTUS_IMG, PTERO_IMG
+from module.resources import CACTUS_IMG, PTERO_IMG, VIRUS_IMG
 from module.object import Object
 
 
@@ -48,3 +48,22 @@ class Ptero(Object):
         self.index += 0.1
         if self.index >= 6:
             self.index = 0
+
+
+class Virus(Object):
+    def __init__(self):
+        self.index = random.randrange(0, len(VIRUS_IMG))
+        super().__init__(VIRUS_IMG[self.index], SCREEN_W,
+                         random.randrange(120, 220, 20))
+        self.hitbox = None
+
+    def update_hitbox(self):
+        self.hitbox = pygame.Rect(
+            self.pos_x + 6, self.pos_y + 6,
+            self.image.get_width() - 12,
+            self.image.get_height() - 12
+        )
+
+    def update(self, speed):
+        self.pos_x -= speed
+        self.update_hitbox()
